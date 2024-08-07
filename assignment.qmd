@@ -1,0 +1,890 @@
+---
+title: "Assignment 8"
+subtitle: "DSAN Bootcamp 2024"
+format:
+  html:
+    embed-resources: true
+    df-print: kable
+    link-external-icon: true
+    link-external-newwindow: true
+    toc: true
+---
+
+## Part 1: Visualizing Parliamentary Gender Representation Using `ggplot2`
+
+### Overview
+
+The [Inter-Parliamentary Union](https://www.ipu.org/about-ipu/history-ipu){target='_blank'}, founded in 1889 to facilitate the development of parliamentary systems around the globe, maintains an up-to-date monthly-updated dataset tracking the [**gender balance** of delegates](https://data.ipu.org/women-ranking/?date_year=2024&date_month=06){target='_blank'} from 193 different national parliaments. From among these 193 observations, we will be focusing in on "Greater North America" (North America proper plus the Caribbean and Central America), where we'll see how this sub-region of the world simultaneously contains some of the *most* gender-equal parliaments in very close proximity to some of the *least* gender-equal parliaments.^[If you feel like putting your social science hat on while working through the questions, you can think about what underlying variables might *explain* the presence of this high variation in gender equality, despite the somewhat similar histories/cultural compositions among many of the countries in the region!]
+
+One nice thing about this IPU data is that, while you can view it "manually" as an HTML table via the above link, it also comes with an **API** (linked in the upper-right corner of the table, alongside `.xls` and `.csv` versions of the table).
+
+This means in particular that, instead of "hard-coding" the data from a particular month into our visualizations, we can write R code that will always fetch the **most up-to-date version** of the data and then (re-)generate the series of visualizations you'll create in this problem. So, meaning, someone could run your code a year from now to produce a comparable series of visualizations in order to see whether the global parliamentary gender gap has gotten better/worse in 2025 relative to 2024!
+
+::: {.callout-tip title="Finding Your 'Go-To' Dataset"}
+
+I (Prof. Jeff) am predisposed to use data on International Political Economy as my "go-to" data (because it was the focus of my PhD coursework), meaning that I default to downloading and using this type of data when I explore how different data visualization libraries work.
+
+However, this doesn't mean **you** have to have the same default! If there is a particular subject that you are interested in exploring during your time in the DSAN program--medicine, climate change, finance, etc.--you can think about (or ask us about!) what a relevant "default" dataset related to that subject could be, and then try making some basic plots like the ones in this assignment to get a feel for the structure of that dataset.
+
+:::
+
+### Question 1.0: Setup
+
+We are including the following R code cells for you here, before the loading and visualization of data, which:
+
+**1\.** This tells the `ggplot2` package^[To avoid confusion: the **package** is called `ggplot2`, since it is the second version of a [much older package](https://github.com/hadley/ggplot1){target='_blank'}, whereas the **function** that initiates the creation of a plot is called `ggplot()` (in both version 1 and version 2).] (part of `tidyverse`) to use a custom colorblindness-friendly color palette, then sets the default theme to be `theme_classic()` rather than `theme_grey()` (you can preview the differences between the available `ggplot2` themes [here](https://ggplot2.tidyverse.org/reference/ggtheme.html){target='_blank'})
+
+```{r}
+#| label: define-colorblind-palette
+#| warning: false
+library(tidyverse)
+cbPalette <- c(
+    "#E69F00", "#56B4E9", "#009E73",
+    "#F0E442", "#0072B2", "#D55E00",
+    "#CC79A7"
+)
+options(
+    list(
+        ggplot2.discrete.fill = cbPalette,
+        ggplot2.discrete.colour = cbPalette
+    )
+)
+theme_set(theme_classic())
+```
+
+**2\.** This helps us eliminate **code reuse** by defining a `rotate_labels()` function, which we can include in our calls to `ggplot()` to rotate the $x$-axis labels by 45 degrees (since some of the country names are a bit long):
+
+```{r}
+#| label: define-rotate-labels
+rotate_labels <- function() {
+    return(
+        theme(
+            axis.text.x = element_text(
+                angle = 45,
+                hjust = 1
+            )
+        )
+    )
+}
+```
+
+**3\.** Similarly, since `ggplot2` **left-aligns** titles by default, here we define a `center_title()` function which center-aligns the title of a `ggplot2`-produced plot, to make the text labels in our plots a bit more symmetric overall (since the $x$-axis and $y$-axis labels are center-aligned by default).
+
+```{r}
+#| label: define-center-title
+center_title <- function() {
+    return(
+        theme(
+            plot.title = element_text(
+                hjust = 0.5
+            )
+        )
+    )
+}
+```
+
+Now, at the end of any visualization pipelines you write, you can include calls to `rotate_labels()` or `center_title()` to adjust the visualization accordingly.
+
+### Question 1.1: Downloading from the IPU's API
+
+Here we've provided the first three steps of querying and parsing the API data for you, since we want you to focus more on the `ggplot2` concepts in this question. But, please try to understand the general *process* of what's happening in these first three steps (even if the code looks scary), since it's a pattern that you'll want to use as you get more comfortable working with APIs!
+
+**1\.** We check if the serialized response from the IPU data has already been downloaded. If not, we call the API and save the returned data:
+
+```{r}
+#| label: download-ipu-data
+#| warning: false
+# You saw this httr2 library in the lecture on APIs!
+library(httr2)
+api_url <- "https://api.data.ipu.org/v1/reports/women-ranking?year=2024&month=06"
+rds_fpath <- "./ipu_response.rds"
+if (!file.exists(rds_fpath)) {
+    # Construct the request object
+    request_obj <- request(api_url)
+    # Perform the request
+    response <- request_obj |> req_perform()
+    # Parse the (JSON-format) server response
+    response_parsed <- response |> resp_body_json()
+    # Extract just the data (thus dropping the query metadata)
+    response_data <- response_parsed$data
+    # Serialize the response to disk, so that we don't need
+    # to keep re-downloading the data each time we run this .qmd file!
+    saveRDS(response_data, "ipu_response.rds")
+}
+```
+
+**2\.** We load the downloaded data into R's memory using `readRDS()`, then apply some cleaning steps to (a) make the variable names (column headers) more compact and easy to use with `tidyverse` and (b) manually adjust the names of a few countries, so that they match the names used in the World Bank's population dataset (which we'll merge with this data in a subsequent step):
+
+```{r}
+#| label: load-and-clean-ipu-data
+# Load the saved API response from disk
+response_data <- readRDS("ipu_response.rds")
+# These three lines are a bit scary-looking, but they
+# just "wrangle" the raw data returned by the API into
+# a form that can then be converted to a tibble (tidyverse's default
+# tabular data format)
+response_rows_list <- lapply(response_data, unlist)
+response_tib_rows <- lapply(response_rows_list, as_tibble_row)
+ipu_df <- bind_rows(response_tib_rows)
+# Select only a subset of relevant variables
+ipu_df <- ipu_df |> select(
+    `country_name.en`,
+    region, subregion,
+    lower_chamber_current_women_number,
+    lower_chamber_current_members_number,
+    lower_chamber_percent_women
+)
+# Rename the columns to be shorter and to eliminate dot (.) characters. Otherwise we would
+# have to use the backtick (``) notation each time
+# we wanted to refer to them.
+ipu_df <- ipu_df |> rename(
+    country = `country_name.en`,
+    women = lower_chamber_current_women_number,
+    members = lower_chamber_current_members_number,
+    pct_women = lower_chamber_percent_women
+)
+```
+
+**3\.** We display the first six rows of the resulting tibble (`ipu_df`), to make sure it matches what we expect:
+
+```{r}
+#| label: display-cleaned-ipu-tibble
+ipu_df |> head()
+```
+
+### Question 1.2: Cleaning the IPU Data
+
+Now that we've got a reduced set of columns with more manageable names, please **write the code for the following remaining steps** in the data cleaning process:
+
+#### Question 1.2.1
+
+Keep only the rows in `ipu_df` representing countries in the `"americas"` region which are **not** in the `"south_america"` subregion.
+
+```{r}
+#| label: q1-2-1-response
+filter_ipu_df <- ipu_df[ipu_df$region == "americas" & ipu_df$subregion != "south_america", ]
+head(filter_ipu_df)
+```
+
+#### Question 1.2.2
+
+Use the [`case_match()`](https://dplyr.tidyverse.org/reference/case_match.html){target='_blank'} function from `dplyr`, along with the `mutate()` function you learned in lecture, to manually adjust a few of the values in the `country` column:
+
+| Old Value | | New Value |
+| - |:-:| - |
+| `"Bahamas"` | &rarr; | `"Bahamas, The"` |
+| `"Saint Kitts and Nevis"` | &rarr; | `"St. Kitts and Nevis"` |
+| `"Saint Lucia"` | &rarr; | `"St. Lucia"` |
+| `"Saint Vincent and the Grenadines"` | &rarr; | `"St. Vincent and the Grenadines"` |
+| `"United States of America"` | &rarr; | `"United States"` |
+
+: {tbl-colwidths="[45,10,45]"}
+
+```{r}
+#| label: q1-2-2-response
+ipu_df <- ipu_df |> mutate(country = case_match(country,
+    "Bahamas" ~ "Bahamas",
+    "Saint Kitts and Nevis" ~ "St. Kitts and Nevis",
+    "Saint Lucia" ~ "St. Lucia",
+    "Saint Vincent and the Grenadines" ~ "St. Vincent and the Grenadines",
+    "United States of America" ~ "United States",
+    .default = country
+))
+```
+
+### Question 1.3: Identify and Filter the Highest-Population Countries
+
+For this question, we have provided a separate `world_bank_pop.csv` file, which containing the World Bank's estimates for the population of each country for each year from 1960 to 2023.
+
+#### Question 1.3.1
+
+Load the data from the `world_bank_pop.csv` file into a tibble named `pop_df`, then keep only the columns with headers `"Country Name"` and `"2023"`, and rename them `country` and `pop`, respectively. Display the first six rows of `pop_df` using the `head()` function from Base R to verify that the two columns have been successfully renamed.
+
+```{r}
+#| label: q1-3-1-response
+#| warning: false
+
+pop_df <- read_csv("world_bank_pop.csv")
+
+pop_df <- pop_df |>
+    select("Country Name", "2023") |>
+    rename(country = "Country Name", pop = "2023")
+
+head(pop_df)
+```
+
+#### Question 1.3.2
+
+Now that you've reduced the World Bank data down to only the two relevant columns, use the [`left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html){target='_blank'} function from `dplyr` to **merge** the `pop` column from `pop_df` into the `ipu_df` tibble created in Question 1.1. Then use `dplyr`'s [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html){target='_blank'} function to **sort** the newly-merged dataset in **descending order** by population (so, the first observation in `ipu_df` should be the country with the greatest population, the second observation should be the country with the second-greatest population, and so on). Use the `head()` function to display the first six rows, to verify that the merging and sorting worked correctly.
+
+```{r}
+#| label: q1-3-2-response
+ipu_df <- ipu_df |> left_join(pop_df, by = "country")
+ipu_df <- ipu_df |> arrange(desc(pop))
+
+head(ipu_df)
+```
+
+#### Question 1.3.3
+
+Since our plot will get too busy if we include *all* Greater North American countries, write code here to modify `ipu_df` so that only those countries whose populations are **greater than 1 million** are retained.
+
+```{r}
+#| label: q1-3-3-response
+ipu_df <- ipu_df |> filter(pop > 1000000)
+
+tail(ipu_df)
+```
+
+#### Question 1.3.4
+
+Finally, to get a sense of the variation in population between these remaining countries, use `ggplot2` to generate a **bar graph** where the height of each bar represents the population of each country. The countries should be ordered along the $x$-axis in **decreasing order by population** (see info box)
+
+::: {.callout-tip title="Ordering Bars and Rotating Axis Labels"}
+
+We didn't get the chance to cover the `forcats` library in much detail in the lecture, unfortunately, but you can use its [`fct_reorder()`](https://forcats.tidyverse.org/reference/fct_reorder.html){target='_blank'} function to transform a "regular" tibble column into a `factor` whose **order** is defined with respect to another column. So, for example, to ensure that `ggplot2` displays the countries in `ipu_df` in **decreasing order by population**, you can include a call to `mutate()` at the beginning of your pipeline (i.e., before calling the `ggplot()` function itself) that looks like:
+
+``` {.r}
+my_df <- my_df |>
+  mutate(
+    country = fct_reorder(country, desc(pop))
+  ) |>
+  ggplot(...)
+```
+
+Then, at the end of your `ggplot2` pipeline, you can use the `rotate_labels()` function we defined at the beginning of the assignment to make the $x$-axis more readable. So, to have (a) bars ordered by country population and (b) rotated $x$-axis labels, your pipeline should look like the following:
+
+``` {.r}
+ipu_df |> 
+  mutate(
+    country = fct_reorder(country, desc(pop))
+  ) |>
+  ggplot(aes(x=___, y=___)) +
+  geom_xxxxx() +
+  theme_classic() +
+  rotate_labels()
+```
+
+:::
+
+Please note also, that in this and all remaining questions in the assignment where you are generating **visualizations**, you will need to use the [`labs()`](https://ggplot2.tidyverse.org/reference/labs.html){target='_blank'} function from `ggplot2` to add informative **titles**, **axis labels**, and **legend titles** to your plots. In this case, for example, you can use
+
+``` {.r}
+labs(
+    x="Country",
+    y="Population (2023)",
+    title="Countries of Greater North America, by Population"
+)
+```
+
+Finally, make sure to use the `rotate_labels()` and/or `center_title()` helper functions we defined above (in this and the remaining questions), where appropriate.
+
+```{r}
+#| label: q1-3-4-response
+ipu_df <- ipu_df |>
+    mutate(country = fct_reorder(country, desc(pop)))
+
+ggplot(head(ipu_df, 35), aes(x = country, y = pop)) +
+    geom_bar(stat = "identity") +
+    labs(x = "Country", y = "Population (2023)", title = "Top 35 Biggest Countries of Greater North America, by Population") +
+    theme_classic() +
+    rotate_labels() +
+    center_title()
+```
+
+### Question 1.4: Visualizing Women's Participation
+
+In this question we'll move from the `pop` column to the columns representing our actual variables of interest, the representation of women in the different national parliaments.
+
+#### Question 1.4.1
+
+Use the `summary()` function from Base R to print out a description of the columns in `ipu_df`.
+
+*Note that this is **not** the same as the [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html){target='_blank'} function from `dplyr`, which has a different usage--the latter is used to aggregate the data up to the level of summary statistcs, whereas here we just want to display some information about each column in our tibble.*
+
+```{r}
+#| label: q1-4-1-response
+summary(ipu_df)
+```
+
+#### Question 1.4.2
+
+From the `summary()` output, you should notice that three of the variables we'd like to analyze as **numbers**--`women`, `members`, and `pct_women`--are currently stored as `character` variables 😰 to fix this, use the `as.numeric()` function from Base R along with `mutate()` to convert these three variables to the `numeric` type, then use `summary()` again to display descriptions of each column in `ipu_df`, to verify that the three columns now have the correct type.
+
+```{r}
+#| label: q1-4-2-response
+ipu_df <- ipu_df |> mutate(
+    women = as.numeric(women),
+    members = as.numeric(members),
+    pct_women = as.numeric(pct_women)
+)
+summary(ipu_df)
+```
+
+#### Question 1.4.3
+
+From this second `summary()` output, you should now also see that there is an observation with `NA` values for the `women`, `members`, and `pct_women` variables^[This country, Haiti, has `NA` values since the seats in their Senate have been [vacant since January 10th, 2023](https://apnews.com/article/politics-haiti-united-states-government-florida-state-latin-america-36dad35dce439953e59af39a449206c0){target='_blank'}.]. Although some `ggplot2` functions can handle `NA` values "gracefully" (by just skipping the observations when plotting, for example), the `fct_reorder()` function we'll use does not like `NA` values. So, use the [`drop_na()`](https://tidyr.tidyverse.org/reference/drop_na.html){target='_blank'} function from `tidyr` to **drop this observation** so we can avoid this issue.
+
+```{r}
+#| label: q1-4-3-response
+
+ipu_df <- drop_na(ipu_df)
+
+summary(ipu_df)
+```
+
+#### Question 1.4.4
+
+Finally, use `ggplot2` to generate a **bar graph** where the height of each bar represents the percentage of women in each national parliament. As in the previous question, you can use `rotate_labels()` to make the $x$-axis labels more readable.
+
+```{r}
+#| label: q1-4-4-response
+
+ipu_df <- ipu_df |> mutate(country = fct_reorder(country, desc(pct_women)))
+
+ggplot(head(ipu_df, 35), aes(x = country, y = pct_women)) +
+    geom_bar(stat = "identity") +
+    labs(x = "Country", y = "Percentage of Women in Parliament", title = "Top 35 Countries with Women in National Parliaments") +
+    theme_classic() +
+    rotate_labels() +
+    center_title()
+```
+
+### Question 1.5: From Bar Graphs to Pie Charts
+
+In this question, we'll see how the **grammar of graphics** (the plot-creation syntax underlying `ggplot2`--that is, what the `"gg"` part of `ggplot2` stands for) allows us to transform a **bar plot** into a **pie chart** using a sequence of simple transformations.
+
+#### Question 1.5.1
+
+Whereas in the previous question we just plotted the percentage of women in each national parliament, for this question we're going to need to also have a variable for the percentage of non-women in each parliament. So, write code to add an additional column called `pct_non_women` to `ipu_df`, whose value is just `100` minus the percentage of women in the parliament.
+
+```{r}
+#| label: q1-5-1-response
+ipu_df <- ipu_df |> mutate(pct_non_women = 100 - pct_women)
+```
+
+#### Question 1.5.2
+
+Next, we'll have to utilize the notion of **pivoting** a tibble to make it longer/wider, that we discussed in lecture. Since we now want `ggplot2` to generate two separate geometries for each country (one bar for the pecentage of women, and another bar for the percentage of non-women, which will then be stacked vertically), we need to have one row for each country's percentage of women and another row for each country's percentage of non-women.
+
+So, use the [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html){target='_blank'} function from `tidyr` to achieve this, generating a **new tibble** named `long_df`, where the variable **names** should go into a column called `var_name` and the variable **values** from `ipu_df` should now go into a column called `var_value`. Specifically, for example, the first six rows of `long_df` should look as follows:
+
+```{=html}
+<style>
+.smaller-table {
+    font-size: 75% !important;
+    line-height: 1.0 !important;
+}
+</style>
+```
+
+::: {.smaller-table}
+
+| country | region | subregion | women | members | pop | var_name | var_value |
+| - | - | - | -:| -:| -:| - | -:|
+| United States | americas | north_america | 126 | 429 | 334914895 | pct_women | 29.4 |
+| United States | americas | north_america | 126 | 429 | 334914895 | pct_non_women | 70.6 |
+| Mexico | americas | north_america | 252 | 500 | 128455567 | pct_women | 50.4 |
+| Mexico | americas | north_america | 252 | 500 | 128455567 | pct_non_women | 49.6 |
+| Canada | americas | north_america | 102 | 336 | 40097761 | pct_women | 30.4 |
+| Canada | americas | north_america | 102 | 336 | 40097761 | pct_non_women | 69.6 |
+
+:::
+
+After the call to `pivot_longer()`, use the `head()` function to display the first six rows of `long_df`, to verify that each country in the dataset now has separate rows for its `pct_women` and `pct_non_women` values, and that it looks like the table shown above!
+
+```{r}
+#| label: q1-5-2-response
+long_df <- ipu_df |>
+    pivot_longer(
+        cols = c(pct_women, pct_non_women),
+        names_to = "names",
+        values_to = "values"
+    )
+
+head(long_df)
+```
+
+#### Question 1.5.3
+
+To start with, let's construct a stacked bar chart using `long_df` for just a single country, the United States in this case. Since the $x$-axis will eventually be collapsed down into a single point to construct our pie chart, we actually *don't* want any $x$-axis label in this case. So, since this can be a bit confusing at first, here we've provided you the code to generate this single-country stacked bar chart. (Free points!)
+
+```{r}
+#| label: q1-5-3-response
+if (exists("long_df")) {
+    long_df |>
+        filter(country == "United States") |>
+        ggplot(aes(x = "", y = values, fill = names)) +
+        geom_bar(stat = "identity") +
+        labs(
+            title = "Gender of US Congressional Representatives",
+            x = "",
+            y = "Percentage"
+        ) +
+        center_title()
+}
+```
+
+#### Question 1.5.4
+
+This is the moment you've all been waiting for! Add a call to the [`coord_polar()`](https://ggplot2.tidyverse.org/reference/coord_polar.html){target='_blank'} function from `ggplot2` to the end of your pipeline, using the argument `theta="y"` (to tell it that you'd like the height of each bar to be transformed into the angle of each "pie slice"), to convert the stacked bar chart you just generated into a pie chart!
+
+*(In other words, as a hint, the code here should only have one additional line of code relative to the previous code cell. However, you can make a second change by explicitly adding a function call to [`theme_void()`](https://ggplot2.tidyverse.org/reference/ggtheme.html){target='_blank'} to override the default `theme_classic()` we set at the beginning of the assignment, since this will remove all axis lines to make the pie chart look much cleaner)*
+
+```{r}
+#| label: q1-5-4-response
+long_df |>
+    filter(country == "United States") |>
+    ggplot(aes(x = "", y = values, fill = names)) +
+    geom_bar(stat = "identity", width = 1) +
+    coord_polar(theta = "y") +
+    labs(
+        title = "Gender of US Congressional Representatives",
+        x = "",
+        y = "Percentage"
+    ) +
+    center_title() +
+    theme_void()
+```
+
+#### Question 1.5.5
+
+Now that you've seen how this transformation is achieved for the United States data, write code that generates pie charts for **all** countries in `long_df`, without using any loops!
+
+Note that, to achieve this, you'll need to add a call to `facet_wrap()` to the end of your pipeline, like the following:
+
+``` {.r}
+facet_wrap(vars(country), nrow=3)
+```
+
+This tells `ggplot2` that you'd like it to construct a **grid** of pie charts, where each cell in the grid corresponds to a `country`, and where the grid is spread out across three rows. This is necessary since otherwise `ggplot2` just stacks the charts on top of one another, so that only the chart for the last country in the dataset is visible.
+
+```{r}
+#| label: q1-5-5-response
+ggplot(head(long_df, 50), aes(x = "", y = values, fill = names)) +
+    geom_bar(stat = "identity", width = 1) +
+    coord_polar(theta = "y", start = 0) +
+    facet_wrap(vars(country), nrow = 3) +
+    labs(
+        title = "Top 50 Gender Distributions by Country"
+    ) +
+    theme_void()
+```
+
+### Question 1.6: Plotting Relative to 50% Baseline
+
+Lastly, as an introduction to the ways in which visualizations can be used to express a **normative** point, the following code is provided for you (more free points!).
+
+It uses `ggplot2` to construct **horizontal** bars for each country (using the [`coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html){target='_blank'} function from `ggplot2`), where instead of `geom_bar()` we use `geom_segment()` to construct (very thick) line segments drawn from a **50% Baseline**, representing perfect gender equality, marked using a vertical dashed line.
+
+You don't need to write any additional code for this part, but we wanted to provide it to (a) introduce you to a few new geoms (`geom_segment()` and `geom_hline()`) and (b) show you how **categories** like "Below 50%" and "Above 50%" can be constructed (here, using the `mutate()` and `ifelse()` functions) and used to color-code these geoms.
+
+```{r}
+#| label: q1-5-6-response
+ipu_df |>
+    filter(region == "americas" & subregion != "south_america") |>
+    mutate(pct_women = as.numeric(pct_women)) |>
+    drop_na(pct_women) |>
+    mutate(
+        category = ifelse(pct_women < 50, "Below 50%", "Above 50%"),
+        country = fct_reorder(country, pct_women)
+    ) |>
+    ggplot(
+        aes(x = country, y = pct_women, color = category, xend = country)
+    ) +
+    geom_segment(
+        # Ensure that all lines start from x=50
+        yend = 50,
+        # And make them wide so they look like bars
+        linewidth = 8
+    ) +
+    geom_hline(yintercept = 50, linetype = "dashed") +
+    coord_flip() +
+    theme_classic()
+```
+
+## Part 2: Visualizing Ages of US Representatives
+
+Whereas in Part 1 we used a variable that we **discretized** to give ourselves the `pct_women` and `pct_non_women` variables^[Note that this is not the same as saying that gender is in some way *inherently* discrete! Hence we use a verb form ("discretized") rather than an adjectival form ("is discrete"), to emphasize this here. For a deeper dive into the importance of this concern for data scientists, you can take [DSAN 5450: Data Ethics and Policy](https://jjacobs.me/dsan5450/){target='_blank'} 😉]
+
+### Question 2.1: Loading Data
+
+Load the data from the provided `us_representatives.csv` file into a tibble named `rep_df`, then use the `head()` function to display the first six rows of the data.
+
+```{r}
+#| label: q2-1-response
+#| warning: false
+rep_df <- read_csv("us_representatives.csv")
+
+head(rep_df)
+```
+
+### Question 2.2: Visualizing the Overall Age Distribution
+
+Using the [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html){target='_blank'} function from `ggplot2`, create a box-and-whiskers plot to visualize the distribution of `age` across **all** US representatives.
+
+```{r}
+#| label: q2-2-response
+#| warning: false
+ggplot(rep_df, aes(x = "", y = age)) +
+    geom_boxplot(width = 0.2) +
+    labs(title = "Distribution of Age For All US Representatives", y = "Age (years)", size = 14) +
+    theme(
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 14),
+        plot.title = element_text(size = 15, hjust = 0.5)
+    )
+```
+
+Based on the plot, what is your estimate for the mean age of all US representatives?
+
+> 60 years
+
+What do the left and right boundaries of the box tell us about the distribution of ages across current US representatives?
+
+> Left side represents the lower quartile. Right side represents the upper quartile. This means lowest 25% of all US representatives are about 50 years old while highest 25% of all US representatives are about 70 years old.
+
+### Question 2.3: Visualizing Age by Party
+
+```{=html}
+<style>
+.dem {
+    color: blue !important;
+}
+.repub {
+    color: red !important;
+}
+.indep {
+    color: darkgray !important;
+}
+</style>
+```
+
+Copy your code from Question 2.2 here, but add a `fill` value within the call to `aes()` so that it now produces **separate** box-and-whiskers plots for each unique value of the `party` column. This means that you should have **three** different box-and-whiskers plots: one for [Democratic]{.dem} representatives, one for [Republican]{.repub} representatives, and one for [Independent]{.indep} representatives.
+
+::: {.callout-tip title="Manually Setting Colors"}
+
+For this question and the next, it makes sense to use a **custom** color palette rather than the default palette we chose at the beginning of Part 1, since the pary affiliations of representatives are typically color-coded as [blue for Democrats]{.dem} (Democrats), [red for Republicans]{.repub} (Republicans), and [gray for Independents]{.indep}.
+
+So, to achieve this, `ggplot2` provides a function called [`scale_fill_manual()`](https://ggplot2.tidyverse.org/reference/scale_manual.html){target='_blank'}, which you can add to your plotting pipeline to override the default colors, by providing a keyword argument for the `values` parameter.
+
+For example, in a dataset with a column named `category` containing unique values `"A"`, `"B"`, and `"C"`, the following pipeline would generate three separate box-and-whiskers plots where the `"A"` plot would be colored purple (hex code `#800080`), the `"B"` plot would be colored pink (hex code `#FFC0CB`), and `"C"` plot would be colored green (`#00FF00`).
+
+``` {.r}
+fill_color_map <- c(
+    "A"="#800080",
+    "B"="#FFC0CB",
+    "C"="#00FF00"
+)
+age_df |> ggplot(aes(x=age, fill=party)) +
+  geom_boxplot() +
+  theme_classic() +
+  scale_fill_manual(values=color_map)
+```
+
+In the following starter code, we've provided hex codes representing the colors used for each party by [fivethirtyeight.com](https://projects.fivethirtyeight.com/polls/){target='_blank'}, so your job is to use them as part of a call to `scale_fill_manual()`!
+
+:::
+
+```{r}
+#| label: q2-3-response
+dem_538 <- "#7a86c0"
+rep_538 <- "#e7735c"
+ind_538 <- "#6f6f6f"
+
+ggplot(rep_df, aes(x = "", y = age, fill = party)) +
+    geom_boxplot(width = 0.2) +
+    labs(title = "Distribution of Age Among US Representatives by Party", y = "Age (years)") +
+    scale_fill_manual(values = c(dem_538, rep_538, ind_538), labels = c("Democrat", "Republican", "Independent")) +
+    theme(
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 14),
+        plot.title = element_text(size = 16, hjust = 0.5),
+        axis.text.x = element_text(size = 14)
+    )
+```
+
+Based on this new by-party plot, what are your estimates for the mean age of Republican, Independent, and Democratic representatives, respectively?
+
+The mean age of **Republican** representatives is about:
+
+> 80 years
+
+The mean age of **Independent** representatives is about:
+
+> ~ 58 years
+
+The mean age of **Democratic** representatives is about:
+
+> 60 years
+
+### Question 2.4: Violin Plots
+
+Finally, in this question you'll see how `ggplot2` allows us to quickly switch to a different visualization of the same data, with only minor modifications to the code.
+
+Copy your code from Question 2.3 here, then modify it so that:
+
+* Instead of producing box-and-whiskers plots it produces **violin plots**, which can be generated using the [`geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html){target='_blank'} function from `ggplot2`, and
+* Use the [`coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html){target='_blank'} function from `ggplot2` so that the "violins" are oriented **vertically** rather than horizontally.
+
+This means that you should now have **three** different vertical violin plots, visualizing the age distribution for [Democratic]{.dem}, [Republican]{.repub}, and [Independent]{.indep} representatives.
+
+```{r}
+#| label: q2-4-response
+dem_538 <- "#7a86c0"
+rep_538 <- "#e7735c"
+ind_538 <- "#6f6f6f"
+
+ggplot(rep_df, aes(x = "", y = age, fill = party)) +
+    geom_violin() +
+    coord_flip() +
+    labs(title = "Distribution of Age Among US Representatives by Party", y = "Age (years)") +
+    scale_fill_manual(values = c(dem_538, rep_538, ind_538), labels = c("Democrat", "Republican", "Independent")) +
+    theme(
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 14),
+        plot.title = element_text(size = 16, hjust = 0.5),
+        axis.text.x = element_text(size = 14)
+    )
+```
+
+## Part 3: Visualizing Text
+
+We have provided, in a subfolder named `HP_Corpus`, plaintext files containing the text of each book in the Harry Potter series. Just as the visualizations you produced in Parts 1 and 2 allowed you to quickly derive insights about the data that would otherwise have required manual scrolling through the data table, here we'll see how we can use visualization to quickly derive insights into a text corpus, without having to read it manually!
+
+### Question 3.1: Reading Multiple Text Files
+
+The following code uses R's built-in [`Sys.glob()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/Sys.glob){target='_blank'} function to get a listing of all `.txt` files within the `HP_Corpus` directory, then uses [`read_lines()`](https://readr.tidyverse.org/reference/read_lines.html) from `readr` along with `as_tibble()` from the `tibble` package to construct a tibble where each row contains a single line of text from the files. Try your best to understand how this works (it is the Green Eggs and Ham example from the lecture, extended to load *multiple* text files from disk instead of just a single text file from GitHub), but don't worry if parts of it are still somewhat confusing, you'll get more practice in your full DSAN courses!
+
+```{r}
+#| label: q3-1-response
+library(tidyverse)
+library(tidytext)
+text_fpaths <- Sys.glob("HP_Corpus/*.txt")
+text_df <- tibble()
+for (text_fpath in text_fpaths) {
+    cur_text_df <- as_tibble(read_lines(text_fpath))
+    # Remove empty lines
+    cur_text_df <- cur_text_df |> filter(value != "")
+    # Append the newly-loaded lines to the end of text_df
+    text_df <- text_df |> rbind(cur_text_df)
+}
+# Display the first six lines
+text_df |> head()
+# And the total number of lines read into the tibble
+nrow(text_df)
+```
+
+### Question 3.2: Tokenization
+
+Now that the `text_df` tibble is ready to go, use the [unnest_tokens()](https://juliasilge.github.io/tidytext/reference/unnest_tokens.html){target='_blank'} function from `tidytext` to tokenize the text contained in `text_df` into a **token-level** tibble named `token_df`. Then use the `head()` function to display the first six **tokens** in the corpus.
+
+```{r}
+#| label: q3-2-response
+token_df <- text_df |> unnest_tokens(word, value)
+
+head(token_df)
+```
+
+### Question 3.3: Stopword Removal
+
+Now that we have a tibble containing **tokens** rather than full lines of text, we'll want to remove **stopwords** from this collection of tokens before generating the wordcloud, so that **non-content words** like "the", "but", or "and" don't appear in the wordcloud.
+
+So, use the [`get_stopwords()`](https://www.rdocumentation.org/packages/tidytext/versions/0.4.2/topics/get_stopwords) function from `tidytext`, along with the [`anti_join()`](https://dplyr.tidyverse.org/reference/filter-joins.html){target='_blank'} function from `dplyr`, to update `token_df` so that it no longer contains (English-language) stopwords. Then use the `head()` function to display the first six tokens in the updated tibble, to verify that (for example) `"the"` has been removed.
+
+```{r}
+#| label: q3-3-response
+stopwords <- get_stopwords()
+
+token_df <- token_df |> anti_join(stopwords)
+
+head(token_df)
+```
+
+### Question 3.4: Computing Token Counts
+
+Now use the [`count()`](https://dplyr.tidyverse.org/reference/count.html){target='_blank'} function from `dplyr` to produce a new column in `token_df` named `n`, containing the **frequencies** for each token in the `word` column. Provide the `sort = TRUE` keyword argument to `count()` so that the tibble is returned sorted by frequency in decreasing order, then use the `head()` function to display the six most-frequent words in the text, along with their respective frequencies!
+
+```{r}
+#| label: q3-4-response
+token_df <- token_df |> count(word, sort = TRUE)
+
+head(token_df)
+```
+
+### Question 3.5: The Wordcloud!
+
+Here we can finally produce the wordcloud, using the `ggwordcloud` package, on the basis of the `token_df` with word counts you created in Question 3.4!
+
+First, however, the following code does two things:
+
+* It extracts only the top 100 most-frequent terms from `token_df` into a new tibble named `top_df`, since `ggwordcloud` starts to work more slowly as the number of tokens gets large
+* It then creates a new column called `logn` which is just the logarithm of each token's frequency--because linguistic frequencies tend to follow so-called [Power law](https://en.wikipedia.org/wiki/Power_law){target='_blank'} distributions (see [Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law){target='_blank'} specifically), we'll use `logn` rather than `n` to determine the **colors** of the words.
+
+```{r}
+#| label: q3-5-setup
+library(ggwordcloud)
+top_df <- token_df |> head(100)
+top_df <- top_df |> mutate(logn = log(n))
+top_df |> head()
+```
+
+So, now use `top_df` along with the `geom_text_wordcloud()` function from `ggwordcloud` to produce the wordcloud! Remember:
+
+* The **size** of the words should be proportional to the values in the `n` column, whereas
+* The **colors** of the words should instead be proportional to the values in the `logn` column
+
+And note, lastly, that you should include
+
+``` {.r}
+scale_size_area(max_size = 20)
+```
+
+within your pipeline, since this value seems to perform best in terms of scaling the word sizes: if `max_size` is set too large the plot may not be able to fit all 100 most-frequent words, whereas if it is set too small the less-frequent words may be too small to read!
+
+```{r}
+#| label: q3-5-response
+ggplot(top_df, aes(label = word, size = n, color = logn)) +
+    geom_text_wordcloud() +
+    scale_size_area(max_size = 20)
+```
+
+Write one or two sentences explaining what you observe about the generated wordcloud.
+
+> I see alot of characters in the Harry Potter Universe that were closely related to Harry's lore in the wordcloud. 
+
+### Question 3.6: Interpreting the Token Tibble
+
+The wordcloud is nice for **exploratory** analysis of the text in `HP_Corpus`, but keep in mind that we can also use the **token-level** tibble `token_df` you create in Question 3.4 to compute summary statistics to help you understand or answer questions about the text.
+
+Thus, for this question, use `token_df` along with the `head()` and `tail()` to display both the **top five most frequently used tokens** and the **top five least frequently used tokens** in the corpus (after removing stopwords).
+
+```{r}
+#| label: q3-6-response
+head(token_df, 5)
+tail(token_df, 5)
+```
+
+### Question 3.7: Answering Questions About the Text
+
+Again using the token-level `token_df` tibble you created in Question 3.4, write code to determine whose name appears more frequently in the Harry Potter Corpus: Ron's or Hermione's? (Write the code to show us how you got your answer, then enter the answer in the text block below the code cell)
+
+```{r}
+#| label: q3-7-response
+n_ron <- token_df |>
+    filter(word == "ron") |>
+    pull(n)
+
+n_hermione <- token_df |>
+    filter(word == "hermione") |>
+    pull(n)
+
+if (n_ron > n_hermione) {
+    print("Ron appears more")
+} else {
+    print("Hermione appears more")
+}
+```
+
+Ron's name appears
+
+> 5820
+
+times in the corpus, and Hermione's appears
+
+> 5116
+
+times. So, between the two, the more-frequently-mentioned character is
+
+> Ron
+
+## Question 4: Visualizing Data from the Spotify API
+
+### Overview
+
+Recording artist [Dallas Green](https://en.wikipedia.org/wiki/City_and_Colour){target='_blank'} has had an interesting musical trajectory: after starting the post-hardcore band [Alexisonfire](https://www.youtube.com/watch?v=IwOPi8uyI2M){target='_blank'} in 2001, in his early twenties, he gradually shifted away from this style and towards sadboi acoustic folk music instead, which he began releasing under the name [City and Colour](https://www.youtube.com/watch?v=NjMsWarn8BI){target='_blank'} starting in 2006^[If you don't know what these genres mean, don't worry--just know that the first one (post-hardcore) is fast and loud and involves distorted electric guitars, whereas the second one (acoustic folk) is slower and quieter and involves acoustic guitars.].
+
+One fun aspect of having access to Spotify's API is that it gives us the ability to quantitatively "track" these kinds of shifts over time, to turn them from intuitions or hunches into testable hypotheses. To this end, we'll use the API to download Spotify's [audio features](https://developer.spotify.com/documentation/web-api/reference/get-audio-features){target='_blank'} for both Alexisonfire and City and Colour tracks, then compare them using what's called a [Kernel Density](https://en.wikipedia.org/wiki/Kernel_density_estimation){target='_blank'} plot.
+
+Note, however, that you'll need to create a `.env` file containing your Spotify Client ID and Client Secret as discussed in the lecture for this week. This file should look like:
+
+``` {.bash filename=".env"}
+SPOTIFY_CLIENT_ID=<your client ID here>
+SPOTIFY_CLIENT_SECRET=<your client secret here>
+```
+
+and it should be in the same directory as your assignment 8 `.qmd` file. Once it has been created, and once you have copied-and-pasted your Client ID and Client Secret into the file, you will be able to load these two variables into R's environment by just loading the `dotenv` package via `library(dotenv)`, after which point you can load the `spotifyr` library which will utilize these environment variables to connect to Spotify's API and generate an access token for you. In other words, your first code cell in this section should have the following two lines, in this order:
+
+``` {.r}
+library(dotenv)
+library(spotifyr)
+```
+
+However, **please remember to *not include* your `.env` file in your assignment submission!** This would give all course staff access to the API key Spotify created for you to access their API...^[If this does happen, it's not the end of the world, but you'll need to delete and re-generate both your ID and Client Secret to re-restrict access to yourself only.]
+
+### Question 4.1: Getting the Artists' Audio Features
+
+Use the `spotifyr` R wrapper around Spotify's API to download the [audio features](https://developer.spotify.com/documentation/web-api/reference/get-audio-features){target='_blank'} for both Alexisonfire and City and Colour, storing the returned features for Alexisonfire in a tibble called `alexis_feats` and the returned features for City and Colour in a tibble called `cc_feats`. Then, use the [`bind_rows()`](https://dplyr.tidyverse.org/reference/bind_rows.html){target='_blank'} function from `dplyr` to combine `alexis_feats` and `cc_feats` into a single tibble named `all_feats`, containing the data for both artists.
+
+Note that the "raw" data returned by `get_artist_audio_features()` is big and messy, so here, instead of displaying the rows of `all_feats` using `head()` at the end of your code, just display a list of the returned features we have available to work with by calling
+
+``` {.r}
+names(all_feats)
+```
+
+as the last line in your code cell (which will output a vector where each entry is the name of a column in `all_feats`).
+
+```{r}
+#| label: q4-1-response
+#| warning: false
+library(dotenv)
+library(spotifyr)
+
+# access_token <- get_spotify_access_token()
+
+alexis_feats <- get_artist_audio_features("Alexisonfire")
+cc_feats <- get_artist_audio_features("City and Colour")
+
+all_feats <- bind_rows(alexis_feats, cc_feats)
+
+names(all_feats)
+```
+
+### Question 4.2
+
+While there are a few features that we could use to try and "track" the shift in Green's style over time, here we'll focus on the **energy** feature, since Spotify's description of this feature seems to most closely matches my intuition about the "thing" that changed in his music over time:
+
+> *Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.*
+
+So, to make `all_feats` much more manageable, write code to extract only the `artist_name`, `track_name`, and `energy` columns from `all_feats`, and call the resulting three-column tibble `feat_df`. This reduced-form tibble is now much more manageable, so at the end of your code cell use the `head()` function to display the first six rows of `feat_df`.
+
+```{r}
+#| label: q4-2-response
+feat_df <- all_feats |> select(artist_name, track_name, energy)
+
+head(feat_df)
+```
+
+### Question 4.3
+
+Now, use the [`geom_density()`](https://ggplot2.tidyverse.org/reference/geom_density.html){target='_blank'} function from `ggplot2` to visualize the **two** distributions of `energy`: one for Alexisonfire and one for City and Colour. Since the density curves will overlap to some degree, use the `alpha=0.5` keyword argument to `geom_density()` to make the two curves semi-transparent, so that (for example) you can see the region where they overlap as partly-blue and partly-orange. Concretely, this means that your call to `geom_density()` should look as follows:
+
+``` {.r}
+geom_density(alpha=0.5)
+```
+
+```{r}
+#| label: q4-3-response
+ggplot(feat_df, aes(x = energy, color = artist_name, fill = artist_name)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Energy Distribution by Artist", x = "Energy", y = "Density")
+```
+
+### Question 4.4: Interpretation
+
+Describe the difference between the two distributions you visualized in Question 4.3 in a sentence or two. Do the resulting density plots support our hypothesis that the later-career songs (recorded under City and Colour) are indeed less "fast, loud, and noisy" than the early-career songs (recorded under Alexisonfire)?
+
+> Yes, it supports our hypothesis that the later-career songs of City and Colour has less energy than Alexisonfire. However, in Alexisonfire's later early career, Alexisonfire had lower energy levels than City and Colour.

@@ -1,0 +1,539 @@
+district,name,age,birth_date,party
+CA-31,Grace F. Napolitano,86,12/4/36,Democratic
+DC-AL,Eleanor Holmes Norton,85,6/13/37,Democratic
+KY-05,Harold Rogers,85,12/31/37,Republican
+NJ-09,Bill Pascrell Jr.,85,1/25/37,Democratic
+CA-43,Maxine Waters,84,8/15/38,Democratic
+MD-05,Steny H. Hoyer,83,6/14/39,Democratic
+SC-06,James E. Clyburn,82,7/21/40,Democratic
+CA-11,Nancy Pelosi,82,3/26/40,Democratic
+IL-07,Danny K. Davis,81,9/6/41,Democratic
+TX-31,John Carter,81,11/6/41,Republican
+CA-16,Anna G. Eshoo,80,12/13/42,Democratic
+FL-24,Frederica S. Wilson,80,11/5/42,Democratic
+CT-03,Rosa DeLauro,79,3/2/43,Democratic
+NC-05,Virginia Foxx,79,6/29/43,Republican
+TX-12,Kay Granger,79,1/18/43,Republican
+CA-07,Doris Matsui,78,9/25/44,Democratic
+IL-09,Jan Schakowsky,78,5/26/44,Democratic
+MO-05,Emanuel Cleaver II,78,10/26/44,Democratic
+GA-13,David Scott,77,6/27/45,Democratic
+IN-04,Jim Baird,77,6/4/45,Republican
+NJ-12,Bonnie Watson Coleman,77,2/6/45,Democratic
+CA-08,John Garamendi,77,1/24/45,Democratic
+OH-09,Marcy Kaptur,76,6/17/46,Democratic
+TX-37,Lloyd Doggett,76,10/6/46,Democratic
+CA-12,Barbara Lee,76,7/16/46,Democratic
+NC-12,Alma Adams,76,5/27/46,Democratic
+MD-02,C.A. Dutch Ruppersberger,76,1/31/46,Democratic
+TX-09,Al Green,75,9/1/47,Democratic
+VA-03,Robert C. Scott,75,4/30/47,Democratic
+GA-02,Sanford D. Bishop Jr.,75,2/4/47,Democratic
+NY-12,Jerrold Nadler,75,6/13/47,Democratic
+CA-18,Zoe Lofgren,75,12/21/47,Democratic
+FL-08,Bill Posey,75,12/18/47,Republican
+AS-AL,Aumua Amata Coleman Radewagen,75,12/29/47,Republican
+SC-02,Joe Wilson,75,7/31/47,Republican
+MI-01,Jack Bergman,75,2/2/47,Republican
+FL-22,Lois Frankel,74,5/16/48,Democratic
+MS-02,Bennie Thompson,74,1/28/48,Democratic
+OR-03,Earl Blumenauer,74,8/16/48,Democratic
+CT-01,John B. Larson,74,7/22/48,Democratic
+AZ-07,Raul M. Grijalva,74,2/19/48,Democratic
+PA-16,Mike Kelly,74,5/10/48,Republican
+TX-36,Brian Babin,74,3/23/48,Republican
+MD-07,Kweisi Mfume,74,10/24/48,Democratic
+NY-20,Paul Tonko,73,6/18/49,Democratic
+TN-09,Steve Cohen,73,5/24/49,Democratic
+OK-04,Tom Cole,73,4/28/49,Republican
+TX-25,Roger Williams,73,9/13/49,Republican
+MA-01,Richard E. Neal,73,2/14/49,Democratic
+FL-11,Daniel Webster,73,4/27/49,Republican
+ID-02,Mike Simpson,72,9/8/50,Republican
+TX-29,Sylvia R. Garcia,72,9/6/50,Democratic
+NV-01,Dina Titus,72,5/23/50,Democratic
+OH-03,Joyce Beatty,72,3/12/50,Democratic
+VA-11,Gerald E. Connolly,72,3/30/50,Democratic
+WV-01,Carol Miller,72,11/4/50,Republican
+TX-18,Sheila Jackson Lee,72,1/12/50,Democratic
+TX-26,Michael C. Burgess,72,12/23/50,Republican
+VA-08,Donald S. Beyer Jr.,72,6/20/50,Democratic
+FL-16,Vern Buchanan,71,5/8/51,Republican
+CA-04,Mike Thompson,71,1/24/51,Democratic
+NJ-06,Frank Pallone Jr.,71,10/30/51,Democratic
+WI-04,Gwen Moore,71,4/18/51,Democratic
+MI-05,Tim Walberg,71,4/12/51,Republican
+GA-12,Rick W. Allen,71,11/7/51,Republican
+UT-04,Burgess Owens,71,8/2/51,Republican
+CA-21,Jim Costa,70,4/13/52,Democratic
+MA-09,William Keating,70,9/6/52,Democratic
+FL-05,John Rutherford,70,9/2/52,Republican
+CA-26,Julia Brownley,70,8/28/52,Democratic
+CA-10,Mark DeSaulnier,70,3/31/52,Democratic
+OR-02,Cliff Bentz,70,1/12/52,Republican
+MO-03,Blaine Luetkemeyer,70,5/7/52,Republican
+HI-01,Ed Case,70,9/27/52,Democratic
+MI-06,Debbie Dingell,69,11/23/53,Democratic
+CA-28,Judy Chu,69,7/7/53,Democratic
+CA-41,Ken Calvert,69,6/8/53,Republican
+NY-07,Nydia M. Velazquez,69,3/28/53,Democratic
+TX-03,Keith Self,69,3/20/53,Republican
+CA-48,Darrell Issa,69,11/1/53,Republican
+CT-02,Joe Courtney,69,4/6/53,Democratic
+NJ-02,Jeff Van Drew,69,2/23/53,Republican
+NY-05,Gregory W. Meeks,69,9/25/53,Democratic
+TX-14,Randy Weber,69,7/2/53,Republican
+FL-02,Neal Dunn,69,2/16/53,Republican
+SC-05,Ralph Norman,69,6/20/53,Republican
+NJ-04,Christopher H. Smith,69,3/4/53,Republican
+PA-03,Dwight Evans,68,5/16/54,Democratic
+MI-13,Shri Thanedar,68,1/1/55,Democratic
+OR-01,Suzanne Bonamici,68,10/14/54,Democratic
+GA-04,Hank Johnson,68,10/2/54,Democratic
+NY-13,Adriano Espaillat,68,9/27/54,Democratic
+MN-04,Betty McCollum,68,7/12/54,Democratic
+CA-32,Brad Sherman,68,10/24/54,Democratic
+AL-06,Gary Palmer,68,5/14/54,Republican
+FL-28,Carlos Gimenez,68,1/17/54,Republican
+OH-06,Bill Johnson,68,11/10/54,Republican
+CO-05,Doug Lamborn,68,5/24/54,Republican
+WI-06,Glenn Grothman,67,7/3/55,Republican
+IL-11,Bill Foster,67,10/7/55,Democratic
+TX-28,Henry Cuellar,67,9/19/55,Democratic
+IA-01,Mariannette Miller-Meeks,67,9/6/55,Republican
+WA-04,Dan Newhouse,67,7/10/55,Republican
+CA-45,Michelle Steel,67,6/21/55,Republican
+MA-08,Stephen F. Lynch,67,3/31/55,Democratic
+TX-17,Pete Sessions,67,3/22/55,Republican
+ME-01,Chellie Pingree,67,4/2/55,Democratic
+MD-06,David Trone,67,9/21/55,Democratic
+AR-02,French Hill,66,12/5/56,Republican
+NH-02,Ann McLane Kuster,66,9/5/56,Democratic
+CA-05,Tom McClintock,66,7/10/56,Republican
+NC-04,Valerie P. Foushee,66,5/7/56,Democratic
+IL-02,Robin Kelly,66,4/30/56,Democratic
+OH-05,Bob Latta,66,4/18/56,Republican
+NC-06,Kathy Manning,66,12/3/56,Democratic
+KS-04,Ron Estes,66,7/19/56,Republican
+IL-04,"Jesus ""Chuy"" Garcia",66,4/12/56,Democratic
+IN-06,Greg Pence,66,11/14/56,Republican
+CO-01,Diana DeGette,65,7/29/57,Democratic
+PA-07,Susan Wild,65,6/7/57,Democratic
+WI-07,Tom Tiffany,65,12/30/57,Republican
+GA-01,"Earl L. ""Buddy"" Carter",65,9/6/57,Republican
+NY-25,Joseph D. Morelle,65,4/29/57,Democratic
+OH-14,David Joyce,65,3/17/57,Republican
+AR-03,Steve Womack,65,2/18/57,Republican
+PA-13,John Joyce,65,2/8/57,Republican
+MD-01,Andy Harris,65,1/25/57,Republican
+IL-05,Mike Quigley,64,10/17/58,Democratic
+CA-50,Scott Peters,64,6/17/58,Democratic
+OH-02,Brad Wenstrup,64,6/17/58,Republican
+NV-02,Mark Amodei,64,6/12/58,Republican
+NJ-10,Donald M. Payne Jr.,64,12/17/58,Democratic
+NJ-01,Donald Norcross,64,12/13/58,Democratic
+AZ-09,Paul Gosar,64,11/27/58,Republican
+AZ-08,Debbie Lesko,64,11/14/58,Republican
+MI-08,Dan Kildee,64,8/11/58,Democratic
+AL-03,Mike D. Rogers,64,7/16/58,Republican
+AL-01,Jerry Carl,64,6/17/58,Republican
+VA-09,Morgan Griffith,64,3/15/58,Republican
+CA-46,Lou Correa,64,1/24/58,Democratic
+AZ-05,Andy Biggs,64,11/7/58,Republican
+TN-01,Diana Harshbarger,63,1/1/60,Republican
+MS-04,Mike Ezell,63,4/6/59,Republican
+MA-02,Jim McGovern,63,11/20/59,Democratic
+NY-26,Brian Higgins,63,10/6/59,Democratic
+CO-04,Ken Buck,63,2/16/59,Republican
+VA-01,Rob Wittman,63,2/3/59,Republican
+PA-05,Mary Gay Scanlon,63,8/30/59,Democratic
+PA-15,"Glenn ""GT"" Thompson",63,7/27/59,Republican
+NM-03,Teresa Leger Fernandez,63,7/1/59,Democratic
+PA-04,Madeleine Dean,63,6/6/59,Democratic
+IL-15,Mary Miller,63,8/7/59,Republican
+CA-39,Mark Takano,62,12/10/60,Democratic
+NC-11,Chuck Edwards,62,9/13/60,Republican
+CA-30,Adam B. Schiff,62,6/22/60,Democratic
+GA-07,Lucy McBath,62,6/1/60,Democratic
+OH-10,Michael R. Turner,62,1/11/60,Republican
+IL-12,Mike Bost,62,12/30/60,Republican
+MT-02,Matt Rosendale,62,7/7/60,Republican
+OK-03,Frank D. Lucas,62,1/6/60,Republican
+CA-01,Doug LaMalfa,62,7/2/60,Republican
+UT-02,Chris Stewart,62,7/15/60,Republican
+UT-03,John Curtis,62,5/10/60,Republican
+RI-01,David Cicilline,61,7/15/61,Democratic
+FL-26,Mario Diaz-Balart,61,9/25/61,Republican
+NY-24,Claudia Tenney,61,2/4/61,Republican
+FL-27,Maria Elvira Salazar,61,11/1/61,Republican
+IL-10,Brad Schneider,61,8/20/61,Democratic
+PA-08,Matt Cartwright,61,5/1/61,Democratic
+CA-52,Juan C. Vargas,61,3/7/61,Democratic
+OK-01,Kevin Hern,61,12/4/61,Republican
+MT-01,Ryan Zinke,61,11/1/61,Republican
+LA-03,Clay Higgins,61,8/24/61,Republican
+MI-02,John Moolenaar,61,5/8/61,Republican
+MD-04,Glenn F. Ivey,61,2/27/61,Democratic
+MN-06,Tom Emmer,61,3/3/61,Republican
+WY-AL,Harriet M. Hageman,60,10/18/62,Republican
+AZ-01,David Schweikert,60,3/3/62,Republican
+OH-12,Troy Balderson,60,1/16/62,Republican
+WA-10,Marilyn Strickland,60,9/25/62,Democratic
+GU-AL,James C. Moylan,60,7/18/62,Republican
+PA-10,Scott Perry,60,5/27/62,Republican
+WA-01,Suzan DelBene,60,2/17/62,Democratic
+DE-AL,Lisa Blunt Rochester,60,2/10/62,Democratic
+MD-08,Jamie Raskin,60,12/13/62,Democratic
+TN-03,Chuck Fleischmann,60,10/11/62,Republican
+MO-02,Ann Wagner,60,9/13/62,Republican
+MD-03,John Sarbanes,60,5/22/62,Democratic
+ID-01,Russ Fulcher,60,3/9/62,Republican
+CA-40,Young Kim,60,10/18/62,Republican
+IN-08,Larry Bucshon,60,5/31/62,Republican
+TX-10,Michael McCaul,60,1/14/62,Republican
+GA-09,Andrew Clyde,59,11/22/63,Republican
+NC-02,Deborah K. Ross,59,6/20/63,Democratic
+LA-02,Troy Carter,59,10/26/63,Democratic
+GA-11,Barry Loudermilk,59,12/22/63,Republican
+WI-05,Scott Fitzgerald,59,11/16/63,Republican
+MO-06,Sam Graves,59,11/7/63,Republican
+MO-04,Mark Alford,59,10/4/63,Republican
+MA-05,Katherine M. Clark,59,7/17/63,Democratic
+NC-03,Greg Murphy,59,3/5/63,Republican
+NE-02,Don Bacon,59,8/16/63,Republican
+CA-29,Tony Cardenas,59,3/31/63,Democratic
+FL-12,Gus Bilirakis,59,2/8/63,Republican
+AL-07,Terri A. Sewell,58,1/1/65,Democratic
+NY-09,Yvette D. Clarke,58,11/21/64,Democratic
+WI-02,Mark Pocan,58,8/14/64,Democratic
+TN-02,Tim Burchett,58,8/25/64,Republican
+NC-08,Dan Bishop,58,7/1/64,Republican
+CA-24,Salud Carbajal,58,11/18/64,Democratic
+TN-07,Mark E. Green,58,11/8/64,Republican
+CA-02,Jared Huffman,58,2/18/64,Democratic
+OR-04,Val Hoyle,58,2/14/64,Democratic
+FL-18,Scott Franklin,58,8/23/64,Republican
+KY-02,Brett Guthrie,58,2/18/64,Republican
+PA-09,Dan Meuser,58,2/10/64,Republican
+PA-11,Lloyd K. Smucker,58,1/23/64,Republican
+TN-04,Scott DesJarlais,58,2/21/64,Republican
+OH-04,Jim Jordan,58,2/17/64,Republican
+CA-06,Ami Bera,57,3/2/65,Democratic
+MN-07,Michelle Fischbach,57,11/3/65,Republican
+LA-01,Steve Scalise,57,10/6/65,Republican
+WA-07,Pramila Jayapal,57,9/21/65,Democratic
+AL-04,Robert B. Aderholt,57,7/22/65,Republican
+WA-02,Rick Larsen,57,6/15/65,Democratic
+WA-09,Adam Smith,57,6/15/65,Democratic
+TN-06,John W. Rose,57,2/23/65,Republican
+CA-20,Kevin McCarthy,57,1/26/65,Republican
+VA-05,Bob Good,57,9/11/65,Republican
+CA-35,Norma J. Torres,57,4/23/65,Democratic
+NV-03,Susie Lee,56,11/7/66,Democratic
+TN-08,David Kustoff,56,10/8/66,Republican
+FL-14,Kathy Castor,56,8/20/66,Democratic
+CT-04,Jim Himes,56,7/5/66,Democratic
+AR-01,Rick Crawford,56,1/22/66,Republican
+FL-25,Debbie Wasserman Schultz,56,9/27/66,Democratic
+MS-01,Trent Kelly,56,3/1/66,Republican
+IL-01,Jonathan L. Jackson,56,1/7/66,Democratic
+SC-03,Jeff Duncan,56,1/7/66,Republican
+AL-02,Barry Moore,56,9/26/66,Republican
+MN-08,Pete Stauber,56,5/10/66,Republican
+MI-09,Lisa McClain,56,4/7/66,Republican
+CA-13,John Duarte,56,9/9/66,Republican
+VI-AL,Stacey Plaskett,56,5/13/66,Democratic
+GA-03,Drew Ferguson,56,11/15/66,Republican
+TX-34,Vicente Gonzalez,55,9/4/67,Democratic
+NY-22,Brandon Williams,55,5/22/67,Republican
+TX-04,Pat Fallon,55,12/19/67,Republican
+PA-06,Chrissy Houlahan,55,6/5/67,Democratic
+GA-10,Mike Collins,55,7/2/67,Republican
+TX-13,Ronny Jackson,55,5/4/67,Republican
+FL-04,Aaron Bean,55,1/25/67,Republican
+AR-04,Bruce Westerman,55,11/18/67,Republican
+WA-08,Kim Schrier,54,8/23/68,Democratic
+NJ-07,Thomas H. Kean Jr.,54,9/5/68,Republican
+VA-10,Jennifer Wexton,54,5/27/68,Democratic
+VT-AL,Becca Balint,54,5/4/68,Democratic
+OR-05,Lori Chavez-DeRemer,54,4/7/68,Republican
+IL-16,Darin LaHood,54,7/5/68,Republican
+TX-22,Troy Nehls,54,4/7/68,Republican
+GA-06,Rich McCormick,54,10/7/68,Republican
+OR-06,Andrea Salinas,53,12/6/69,Democratic
+CA-38,Linda T. Sanchez,53,1/28/69,Democratic
+CA-19,Jimmy Panetta,53,10/1/69,Democratic
+TX-16,Veronica Escobar,53,9/15/69,Democratic
+IN-01,Frank J. Mrvan,53,4/16/69,Democratic
+CA-36,Ted Lieu,53,3/29/69,Democratic
+MN-03,Dean Phillips,53,1/20/69,Democratic
+GA-08,Austin Scott,53,12/10/69,Republican
+WA-05,Cathy McMorris Rodgers,53,5/22/69,Republican
+WI-03,Derrick Van Orden,53,9/15/69,Republican
+IA-04,Randy Feenstra,53,1/14/69,Republican
+MI-04,Bill Huizenga,53,1/31/69,Republican
+NE-03,Adrian Smith,52,12/19/70,Republican
+TX-33,Marc Veasey,52,1/3/71,Democratic
+TX-24,Beth Van Duyne,52,11/16/70,Republican
+CA-23,Jay Obernolte,52,8/18/70,Republican
+NY-08,Hakeem Jeffries,52,8/4/70,Democratic
+CA-15,Kevin Mullin,52,6/15/70,Democratic
+AL-05,Dale Strong,52,5/8/70,Republican
+AZ-04,Greg Stanton,52,3/8/70,Democratic
+OH-08,Warren Davidson,52,3/1/70,Republican
+MS-03,Michael Guest,52,2/4/70,Republican
+TX-06,Jake Ellzey,52,1/24/70,Republican
+NC-09,Richard Hudson,51,11/4/71,Republican
+IL-06,Sean Casten,51,11/23/71,Democratic
+NC-01,Don Davis,51,8/29/71,Democratic
+TN-05,Andy Ogles,51,6/18/71,Republican
+WV-02,Alex X. Mooney,51,6/7/71,Republican
+OH-15,Mike Carey,51,3/13/71,Republican
+VA-02,Jen Kiggans,51,6/18/71,Republican
+KY-04,Thomas Massie,51,1/13/71,Republican
+NC-07,David Rouzer,50,2/16/72,Republican
+CA-25,Raul Ruiz,50,8/25/72,Democratic
+TX-21,Chip Roy,50,8/7/72,Republican
+VA-06,Ben Cline,50,2/29/72,Republican
+KY-01,James R. Comer,50,8/19/72,Republican
+CA-37,Sydney Kamlager,50,7/20/72,Democratic
+TX-19,Jodey C. Arrington,50,3/9/72,Republican
+LA-06,Garret Graves,50,1/31/72,Republican
+MN-02,Angie Craig,50,2/14/72,Democratic
+LA-04,Mike Johnson,50,1/30/72,Republican
+NJ-11,Mikie Sherrill,50,1/19/72,Democratic
+PA-01,Brian Fitzpatrick,49,12/17/73,Republican
+WA-06,Derek Kilmer,49,1/1/74,Democratic
+OK-05,Stephanie Bice,49,11/11/73,Republican
+MA-03,Lori Trahan,49,10/27/73,Democratic
+KY-06,Andy Barr,49,7/24/73,Republican
+CA-47,Katie Porter,49,1/3/74,Democratic
+IL-08,Raja Krishnamoorthi,49,7/19/73,Democratic
+NV-04,Steven Horsford,49,4/29/73,Democratic
+AK-AL,Mary Peltola,49,8/31/73,Democratic
+CT-05,Jahana Hayes,49,3/8/73,Democratic
+CA-34,Jimmy Gomez,48,11/25/74,Democratic
+MA-07,Ayanna S. Pressley,48,2/3/74,Democratic
+IN-07,Andre Carson,48,10/16/74,Democratic
+TX-15,Monica De La Cruz,48,11/11/74,Republican
+FL-06,Michael Waltz,48,1/31/74,Republican
+TX-20,Joaquin Castro,48,9/16/74,Democratic
+GA-14,Marjorie Taylor Greene,48,5/27/74,Republican
+FL-15,Laurel Lee,48,3/26/74,Republican
+TX-01,Nathaniel Moran,48,9/23/74,Republican
+OH-11,Shontel Brown,47,6/24/75,Democratic
+TX-07,Lizzie Fletcher,47,2/13/75,Democratic
+NC-13,Wiley Nickel,47,11/23/75,Democratic
+TX-08,Morgan Luttrell,47,11/7/75,Republican
+NC-10,Patrick T. McHenry,47,10/22/75,Republican
+NY-06,Grace Meng,47,10/1/75,Democratic
+NJ-05,Josh Gottheimer,47,3/8/75,Democratic
+NE-01,Mike Flood,47,2/23/75,Republican
+TX-27,Michael Cloud,47,5/13/75,Republican
+NY-19,Marc Molinaro,47,10/8/75,Republican
+CA-44,Nanette Barragan,46,9/15/76,Democratic
+IL-17,Eric Sorensen,46,3/18/76,Democratic
+OH-01,Greg Landsman,46,12/4/76,Democratic
+ND-AL,Kelly Armstrong,46,10/8/76,Republican
+MO-07,Eric Burlison,46,10/2/76,Republican
+CA-17,Ro Khanna,46,9/13/76,Democratic
+MI-12,Rashida Tlaib,46,7/24/76,Democratic
+MO-01,Cori Bush,46,7/21/76,Democratic
+MI-07,Elissa Slotkin,46,7/10/76,Democratic
+CA-27,Mike Garcia,46,4/24/76,Republican
+HI-02,Jill N. Tokuda,46,3/3/76,Democratic
+SD-AL,Dusty Johnson,46,9/30/76,Republican
+IN-09,Erin Houchin,46,9/24/76,Republican
+NY-16,Jamaal Bowman,46,4/1/76,Democratic
+KS-01,Tracey Mann,46,12/17/76,Republican
+NY-10,Dan Goldman,46,2/26/76,Democratic
+MN-01,Brad Finstad,46,5/30/76,Republican
+CA-42,Robert Garcia,45,12/2/77,Democratic
+IL-13,Nikki Budzinski,45,3/11/77,Democratic
+PA-02,Brendan F. Boyle,45,2/6/77,Democratic
+SC-01,Nancy Mace,45,12/4/77,Republican
+TX-11,August Pfluger,45,12/28/77,Republican
+CA-22,David Valadao,45,4/14/77,Republican
+FL-09,Darren Soto,44,2/25/78,Democratic
+GA-05,Nikema Williams,44,7/30/78,Democratic
+FL-17,Greg Steube,44,5/19/78,Republican
+MA-06,Seth Moulton,44,10/24/78,Democratic
+CA-49,Mike Levin,44,10/20/78,Democratic
+IN-05,Victoria Spartz,44,10/6/78,Republican
+FL-19,Byron Donalds,44,10/28/78,Republican
+NY-01,Nick LaLota,44,6/23/78,Republican
+NM-01,Melanie Stansbury,43,1/31/79,Democratic
+AZ-03,Ruben Gallego,43,11/20/79,Democratic
+AZ-02,Eli Crane,43,1/3/80,Republican
+CA-33,Pete Aguilar,43,6/19/79,Democratic
+CO-06,Jason Crow,43,3/15/79,Democratic
+FL-20,Sheila Cherfilus-McCormick,43,1/25/79,Democratic
+KY-03,Morgan McGarvey,43,12/23/79,Democratic
+VA-07,Abigail Spanberger,43,8/7/79,Democratic
+IN-03,Jim Banks,43,7/16/79,Republican
+OK-02,Josh Brecheen,43,6/19/79,Republican
+IA-03,Zach Nunn,43,5/4/79,Republican
+CO-08,Yadira Caraveo,42,12/23/80,Democratic
+NY-11,Nicole Malliotakis,42,11/11/80,Republican
+FL-07,Cory Mills,42,7/13/80,Republican
+MO-08,Jason Smith,42,6/16/80,Republican
+NH-01,Chris Pappas,42,6/4/80,Democratic
+KS-03,Sharice Davids,42,5/22/80,Democratic
+FL-23,Jared Moskowitz,42,12/18/80,Democratic
+CA-14,Eric Swalwell,42,11/16/80,Democratic
+FL-21,Brian Mast,42,7/10/80,Republican
+UT-01,Blake D. Moore,42,6/22/80,Republican
+TX-23,Tony Gonzales,42,10/10/80,Republican
+TX-30,Jasmine Crockett,41,3/29/81,Democratic
+WI-01,Bryan Steil,41,3/3/81,Republican
+CO-07,Brittany Pettersen,41,12/6/81,Democratic
+NY-23,Nick Langworthy,41,2/27/81,Republican
+TX-38,Wesley Hunt,41,11/13/81,Republican
+LA-05,Julia Letlow,41,3/16/81,Republican
+MI-10,John James,41,6/8/81,Republican
+ME-02,Jared Golden,40,7/25/82,Democratic
+FL-01,Matt Gaetz,40,5/7/82,Republican
+NY-04,Anthony D'Esposito,40,2/22/82,Republican
+TX-05,Lance Gooden,40,12/1/82,Republican
+NJ-03,Andy Kim,40,7/12/82,Democratic
+NY-18,Pat Ryan,40,3/28/82,Democratic
+MI-03,Hillary Scholten,40,2/22/82,Democratic
+MN-05,Ilhan Omar,40,10/4/82,Democratic
+NC-14,Jeff Jackson,40,9/12/82,Democratic
+AZ-06,Juan Ciscomani,40,8/31/82,Republican
+IL-03,Delia Ramirez,39,7/2/83,Democratic
+MI-11,Haley Stevens,39,6/24/83,Democratic
+PA-14,Guy Reschenthaler,39,4/17/83,Republican
+RI-02,Seth Magaziner,39,7/22/83,Democratic
+IA-02,Ashley Hinson,39,6/27/83,Republican
+TX-32,Colin Allred,39,4/15/83,Democratic
+NY-02,Andrew Garbarino,38,9/27/84,Republican
+NM-02,Gabe Vasquez,38,8/3/84,Democratic
+SC-04,William R. Timmons IV,38,4/30/84,Republican
+TX-02,Daniel Crenshaw,38,3/14/84,Republican
+NY-21,Elise Stefanik,38,7/2/84,Republican
+CO-02,Joe Neguse,38,5/13/84,Democratic
+WI-08,Mike Gallagher,38,3/3/84,Republican
+PA-17,Chris Deluzio,38,7/13/84,Democratic
+IN-02,Rudy Yakym III,38,2/24/84,Republican
+CA-03,Kevin Kiley,37,1/30/85,Republican
+SC-07,Russell Fry,37,1/31/85,Republican
+NJ-08,Rob Menendez,37,7/12/85,Democratic
+IL-14,Lauren Underwood,36,10/4/86,Democratic
+OH-13,Emilia Sykes,36,1/4/86,Democratic
+NY-17,Mike Lawler,36,9/9/86,Republican
+CA-09,Josh Harder,36,8/1/86,Democratic
+CO-03,Lauren Boebert,36,12/19/86,Republican
+PA-12,Summer Lee,35,11/26/87,Democratic
+OH-07,Max Miller,34,11/13/88,Republican
+NY-03,George Santos,34,7/22/88,Republican
+NY-15,Ritchie Torres,34,3/12/88,Democratic
+FL-03,Kat Cammack,34,2/16/88,Republican
+WA-03,Marie Gluesenkamp Perez,34,6/4/88,Democratic
+MA-04,Jake Auchincloss,34,1/29/88,Democratic
+KS-02,Jake LaTurner,34,2/17/88,Republican
+NY-14,Alexandria Ocasio-Cortez,33,10/13/89,Democratic
+FL-13,Anna Paulina Luna,33,5/6/89,Republican
+TX-35,Greg Casar,33,5/4/89,Democratic
+CA-51,Sara Jacobs,33,2/1/89,Democratic
+FL-10,Maxwell Alejandro Frost,25,1/17/97,Democratic
+Iowa,Charles E. Grassley,89,9/17/33,Republican
+California,Dianne Feinstein,89,6/22/33,Democratic
+Vermont,Bernie Sanders,81,9/8/41,Independent
+Kentucky,Mitch McConnell,80,2/20/42,Republican
+Maryland,Benjamin L. Cardin,79,10/5/43,Democratic
+Idaho,Jim Risch,79,5/3/43,Republican
+Illinois,Richard J. Durbin,78,11/21/44,Democratic
+Maine,Angus King,78,3/31/44,Independent
+Massachusetts,Edward J. Markey,76,7/11/46,Democratic
+Connecticut,Richard Blumenthal,76,2/13/46,Democratic
+Utah,Mitt Romney,75,3/12/47,Republican
+Vermont,Peter Welch,75,5/2/47,Democratic
+Hawaii,Mazie K. Hirono,75,11/3/47,Democratic
+West Virginia,Joe Manchin III,75,8/24/47,Democratic
+New Hampshire,Jeanne Shaheen,75,1/28/47,Democratic
+Delaware,Thomas R. Carper,75,1/23/47,Democratic
+Rhode Island,Jack Reed,73,11/12/49,Democratic
+Oregon,Ron Wyden,73,5/3/49,Democratic
+Massachusetts,Elizabeth Warren,73,6/22/49,Democratic
+Arkansas,John Boozman,72,12/10/50,Republican
+Michigan,Debbie Stabenow,72,4/29/50,Democratic
+New York,Charles E. Schumer,72,11/23/50,Democratic
+Washington,Patty Murray,72,10/11/50,Democratic
+Mississippi,Roger Wicker,71,7/5/51,Republican
+Idaho,Michael D. Crapo,71,5/20/51,Republican
+Louisiana,John Kennedy,71,11/21/51,Republican
+Nebraska,Deb Fischer,71,3/1/51,Republican
+Colorado,John Hickenlooper,70,2/7/52,Democratic
+Florida,Rick Scott,70,12/1/52,Republican
+Texas,John Cornyn,70,2/2/52,Republican
+Wyoming,John Barrasso,70,7/21/52,Republican
+Maine,Susan Collins,70,12/7/52,Republican
+Ohio,Sherrod Brown,70,11/9/52,Democratic
+Tennessee,Marsha Blackburn,70,6/6/52,Republican
+West Virginia,Shelley Moore Capito,69,11/26/53,Republican
+New Jersey,Bob Menendez,69,1/1/54,Democratic
+Virginia,Mark Warner,68,12/15/54,Democratic
+Alabama,Tommy Tuberville,68,9/18/54,Republican
+Kansas,Jerry Moran,68,5/29/54,Republican
+Indiana,Mike Braun,68,3/24/54,Republican
+South Dakota,Mike Rounds,68,10/24/54,Republican
+Wyoming,Cynthia Lummis,68,9/10/54,Republican
+South Carolina,Lindsey Graham,67,7/9/55,Republican
+Wisconsin,Ron Johnson,67,4/8/55,Republican
+Rhode Island,Sheldon Whitehouse,67,10/20/55,Democratic
+Oregon,Jeff Merkley,66,10/24/56,Democratic
+Montana,Jon Tester,66,8/21/56,Democratic
+Alaska,Lisa Murkowski,65,5/22/57,Republican
+Louisiana,Bill Cassidy,65,9/28/57,Republican
+North Dakota,John Hoeven,65,3/13/57,Republican
+Nevada,Jacky Rosen,65,8/2/57,Democratic
+Minnesota,Tina Smith,64,3/4/58,Democratic
+Virginia,Tim Kaine,64,2/26/58,Democratic
+Washington,Maria Cantwell,64,10/13/58,Democratic
+Michigan,Gary Peters,64,12/1/58,Democratic
+New Hampshire,Maggie Hassan,64,2/27/58,Democratic
+Maryland,Chris Van Hollen,63,1/10/59,Democratic
+Mississippi,Cindy Hyde-Smith,63,5/10/59,Republican
+Tennessee,Bill Hagerty,63,8/14/59,Republican
+North Carolina,Thom Tillis,62,8/30/60,Republican
+Minnesota,Amy Klobuchar,62,5/25/60,Democratic
+Kansas,Roger Marshall,62,8/9/60,Republican
+Pennsylvania,Bob Casey,62,4/13/60,Democratic
+North Dakota,Kevin Cramer,61,1/21/61,Republican
+South Dakota,John Thune,61,1/7/61,Republican
+Montana,Steve Daines,60,8/20/62,Republican
+Wisconsin,Tammy Baldwin,60,2/11/62,Democratic
+Delaware,Chris Coons,59,9/9/63,Democratic
+Kentucky,Rand Paul,59,1/7/63,Republican
+Alaska,Dan Sullivan,58,11/13/64,Republican
+Colorado,Michael Bennet,58,11/28/64,Democratic
+Nevada,Catherine Cortez Masto,58,3/29/64,Democratic
+Arizona,Mark Kelly,58,2/21/64,Democratic
+South Carolina,Tim Scott,57,9/19/65,Republican
+New York,Kirsten Gillibrand,56,12/9/66,Democratic
+Illinois,Tammy Duckworth,54,3/12/68,Democratic
+Oklahoma,James Lankford,54,3/4/68,Republican
+New Jersey,Cory Booker,53,4/27/69,Democratic
+Pennsylvania,John Fetterman,53,8/15/69,Democratic
+Georgia,Raphael Warnock,53,7/23/69,Democratic
+Texas,Ted Cruz,52,12/22/70,Republican
+Iowa,Joni Ernst,52,7/1/70,Republican
+Utah,Mike Lee,51,6/4/71,Republican
+New Mexico,Martin Heinrich,51,10/17/71,Democratic
+North Carolina,Ted Budd,51,10/21/71,Republican
+Florida,Marco Rubio,51,5/28/71,Republican
+New Mexico,Ben Ray Lujan,50,6/7/72,Democratic
+Hawaii,Brian Schatz,50,10/20/72,Democratic
+Indiana,Todd Young,50,8/24/72,Republican
+Nebraska,Ben Sasse,50,2/22/72,Republican
+California,Alex Padilla,49,3/22/73,Democratic
+Connecticut,Christopher S. Murphy,49,8/3/73,Democratic
+Missouri,Eric Schmitt,47,6/20/75,Republican
+Arizona,Kyrsten Sinema,46,7/12/76,Independent
+Arkansas,Tom Cotton,45,5/13/77,Republican
+Oklahoma,Markwayne Mullin,45,7/26/77,Republican
+Missouri,Josh Hawley,43,12/31/79,Republican
+Alabama,Katie Britt,40,2/2/82,Republican
+Ohio,J.D. Vance,38,8/2/84,Republican
+Georgia,Jon Ossoff,35,2/16/87,Democratic
